@@ -1,21 +1,42 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeItem, updateQuantity } from '../../state/CartSlice';
+import { addItem, removeItem, updateQuantity } from '../../state/CartSlice';
 
 import './CartItem.css';
+import { plantsArray } from '../product/datas';
 
 const CartItem = ({ onContinueShopping }) => {
   const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
   // Calculate total amount for all products in the cart
-  const calculateTotalAmount = () => {};
+  const calculateTotalAmount = () => {
+    let totalPrice = 0;
 
-  const handleIncrement = (item) => {};
+    cart.forEach((item) => {
+      const cost = parseInt(item.cost.slice(1));
+      totalPrice += cost * item.quantity;
+    });
+    return totalPrice;
+  };
 
-  const handleDecrement = (item) => {};
+  const handleIncrement = (item) => {
+    dispatch(addItem(item));
+  };
 
-  const handleRemove = (item) => {};
+  const handleDecrement = (item) => {
+    if (item.quantity > 1) {
+      dispatch(updateQuantity(item));
+    } else {
+      dispatch(removeItem(item));
+    }
+  };
+
+  const handleRemove = (item) => {
+    console.log('clicked');
+    dispatch(removeItem(item));
+  };
 
   // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {};
@@ -39,7 +60,7 @@ const CartItem = ({ onContinueShopping }) => {
                   +
                 </button>
               </div>
-              <div className="cart-item-total">Total: ${calculateTotalCost(item)}</div>
+              <div className="cart-item-total">Total: {item.totalPricePerItem}</div>
               <button className="cart-item-delete" onClick={() => handleRemove(item)}>
                 Delete
               </button>
