@@ -7,7 +7,11 @@ function App() {
   const [showProductList, setShowProductList] = useState(false);
 
   const handleGetStartedClick = () => {
-    setShowProductList(true);
+    if (showProductList) {
+      setShowProductList(false);
+    } else {
+      setShowProductList(true);
+    }
   };
 
   return (
@@ -16,7 +20,7 @@ function App() {
         <div className="background-image"></div>
         <div className="content">
           <div className="landing_content">
-            <h1>Welcome To Paradise Nursery</h1>
+            <h1>Welcome To Hamzah Nursery</h1>
             <div className="divider"></div>
             <p>Where Green Meets Serenity</p>
 
@@ -30,7 +34,7 @@ function App() {
         </div>
       </div>
       <div className={`product-list-container ${showProductList ? 'visible' : ''}`}>
-        <ProductList />
+        <ProductList handleGetStartedClick={handleGetStartedClick} />
       </div>
     </div>
   );
