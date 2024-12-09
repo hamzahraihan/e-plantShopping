@@ -1,10 +1,8 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addItem, removeItem, updateQuantity } from '../../state/CartSlice';
 
 import './CartItem.css';
-import { plantsArray } from '../product/datas';
 
 const CartItem = ({ onContinueShopping }) => {
   const { cart } = useSelector((state) => state.cart);
@@ -39,7 +37,7 @@ const CartItem = ({ onContinueShopping }) => {
   };
 
   // Calculate total cost based on quantity for an item
-  const calculateTotalCost = (item) => {};
+  // const calculateTotalCost = (item) => {};
 
   return (
     <div className="cart-container">
