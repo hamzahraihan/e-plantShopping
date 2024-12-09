@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addItem } from '../../state/CartSlice';
 import AboutUs from '../about/AboutUs';
 
-function ProductList() {
+function ProductList({ handleGetStartedClick }) {
   const [showCart, setShowCart] = useState(false);
   const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
   const [addedToCart, setAddedToCart] = useState({});
@@ -17,7 +17,7 @@ function ProductList() {
   console.log('🚀 ~ ProductList ~ cart:', cart);
 
   const styleObj = {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#6f7a70',
     color: '#fff!important',
     padding: '15px',
     display: 'flex',
@@ -70,12 +70,12 @@ function ProductList() {
         <div className="tag">
           <div className="luxury">
             <img src="https://cdn.pixabay.com/photo/2020/08/05/13/12/eco-5465432_1280.png" alt="" />
-            <a href="/" style={{ textDecoration: 'none' }}>
+            <button style={{ cursor: 'pointer', fontSize: '1rem', background: 'none', textDecoration: 'none', border: 'none' }} onClick={handleGetStartedClick}>
               <div>
-                <h3 style={{ color: 'white' }}>Paradise Nursery</h3>
+                <h3 style={{ color: 'white' }}>Hamzah Nursery</h3>
                 <i style={{ color: 'white' }}>Where Green Meets Serenity</i>
               </div>
-            </a>
+            </button>
           </div>
         </div>
         <div style={styleObjUl}>
