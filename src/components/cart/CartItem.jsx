@@ -4,9 +4,14 @@ import { addItem, removeItem, updateQuantity } from '../../state/CartSlice';
 
 import './CartItem.css';
 
-const CartItem = ({ onContinueShopping }) => {
+const CartItem = ({ onContinueShopping, setAddedToCart }) => {
   const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+
+  const handleCheckoutShopping = (e) => {
+    e.preventDefault();
+    alert('Functionality to be added for future reference');
+  };
 
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
@@ -28,12 +33,20 @@ const CartItem = ({ onContinueShopping }) => {
       dispatch(updateQuantity(item));
     } else {
       dispatch(removeItem(item));
+      setAddedToCart((prevState) => ({
+        ...prevState,
+        [item.name]: false,
+      }));
     }
   };
 
   const handleRemove = (item) => {
     console.log('clicked');
     dispatch(removeItem(item));
+    setAddedToCart((prevState) => ({
+      ...prevState,
+      [item.name]: false,
+    }));
   };
 
   // Calculate total cost based on quantity for an item
@@ -72,7 +85,9 @@ const CartItem = ({ onContinueShopping }) => {
           Continue Shopping
         </button>
         <br />
-        <button className="get-started-button1">Checkout</button>
+        <button className="get-started-button1" onClick={(e) => handleCheckoutShopping(e)}>
+          Checkout
+        </button>
       </div>
     </div>
   );
