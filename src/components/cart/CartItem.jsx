@@ -6,10 +6,26 @@ import './CartItem.css';
 
 const CartItem = ({ onContinueShopping, setAddedToCart }) => {
   const { cart } = useSelector((state) => state.cart);
+  console.log('🚀 ~ CartItem ~ cart:', cart);
   const dispatch = useDispatch();
 
-  const handleCheckoutShopping = (e) => {
+  const url = 'http://localhost:3000/midtrans';
+
+  const handleCheckoutShopping = async (e) => {
     e.preventDefault();
+
+    try {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      console.log(json);
+    } catch (error) {
+      console.error(error.message);
+    }
     alert('Functionality to be added for future reference');
   };
 
@@ -85,7 +101,7 @@ const CartItem = ({ onContinueShopping, setAddedToCart }) => {
           Continue Shopping
         </button>
         <br />
-        <button className="get-started-button1" onClick={(e) => handleCheckoutShopping(e)}>
+        <button disabled={cart.length == 0} className="get-started-button1" onClick={(e) => handleCheckoutShopping(e)}>
           Checkout
         </button>
       </div>
