@@ -83,10 +83,7 @@ const CartItem = ({ onContinueShopping, setAddedToCart }) => {
         headers: { 'Content-Type': 'application/json' },
         mode: 'cors',
         body: JSON.stringify({
-          user: {
-            email: 'email',
-            password: 'password',
-          },
+          cart,
         }),
       });
       if (!response.ok) {
