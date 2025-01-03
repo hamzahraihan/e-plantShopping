@@ -4,13 +4,13 @@ import { addItem, removeItem, updateQuantity } from '../../state/CartSlice';
 
 import './CartItem.css';
 import { useEffect } from 'react';
+import ModalComponent from '../ui/Modal';
 
 const CartItem = ({ onContinueShopping, setAddedToCart }) => {
   const { cart } = useSelector((state) => state.cart);
 
   const dispatch = useDispatch();
 
-  const url = 'http://localhost:3000/midtrans';
 
   useEffect(() => {
     const fetchMidtrans = () => {
@@ -75,26 +75,7 @@ const CartItem = ({ onContinueShopping, setAddedToCart }) => {
   // const calculateTotalCost = (item) => {};
   const total_amount = calculateTotalAmount();
 
-  const handleCheckoutShopping = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        mode: 'cors',
-        body: JSON.stringify({
-          cart,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error('error');
-      }
-      const { token } = await response.json();
-      window.snap.pay(token);
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
+  
 
   return (
     <div className="cart-container">
@@ -129,9 +110,7 @@ const CartItem = ({ onContinueShopping, setAddedToCart }) => {
           Continue Shopping
         </button>
         <br />
-        <button disabled={cart.length == 0} className="get-started-button1" onClick={(e) => handleCheckoutShopping(e)}>
-          Checkout
-        </button>
+        <ModalComponent totalAmount={total_amount} />
       </div>
     </div>
   );
