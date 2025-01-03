@@ -3,31 +3,37 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addItem, removeItem, updateQuantity } from '../../state/CartSlice';
 
 import './CartItem.css';
+import { useEffect } from 'react';
 
 const CartItem = ({ onContinueShopping, setAddedToCart }) => {
   const { cart } = useSelector((state) => state.cart);
-  console.log('🚀 ~ CartItem ~ cart:', cart);
+
   const dispatch = useDispatch();
 
   const url = 'http://localhost:3000/midtrans';
 
-  const handleCheckoutShopping = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    const fetchMidtrans = () => {
+      try {
+        const midtransSnapScript = 'https://app.sandbox.midtrans.com/snap/snap.js';
+        const clientKey = import.meta.env.VITE_MIDTRANS_CLIENT_KEY;
 
-    try {
-      const response = await fetch(url);
+        const script = document.createElement('script');
+        script.src = midtransSnapScript;
+        script.setAttribute('data-client-key', clientKey);
+        script.async = true;
 
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
+        script.onload = () => {
+          window.snapJsLoaded = true;
+        };
+
+        document.body.appendChild(script);
+      } catch (error) {
+        console.error('Error loading script', error.message);
       }
-
-      const json = await response.json();
-      console.log(json);
-    } catch (error) {
-      console.error(error.message);
-    }
-    alert('Functionality to be added for future reference');
-  };
+    };
+    fetchMidtrans();
+  }, []);
 
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
@@ -67,10 +73,35 @@ const CartItem = ({ onContinueShopping, setAddedToCart }) => {
 
   // Calculate total cost based on quantity for an item
   // const calculateTotalCost = (item) => {};
+  const total_amount = calculateTotalAmount();
+
+  const handleCheckoutShopping = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        mode: 'cors',
+        body: JSON.stringify({
+          user: {
+            email: 'email',
+            password: 'password',
+          },
+        }),
+      });
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      const { token } = await response.json();
+      window.snap.pay(token);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   return (
     <div className="cart-container">
-      <h2 style={{ color: 'black' }}>Total Cart Amount: ${calculateTotalAmount()}</h2>
+      <h2 style={{ color: 'black' }}>Total Cart Amount: ${total_amount}</h2>
       <div>
         {cart.map((item) => (
           <div className="cart-item" key={item.name}>
